@@ -24,3 +24,11 @@ Documentación del proyecto
 Control de versiones
 
 La documentación se administra mediante Git y GitHub, utilizando ramas secundarias, commits descriptivos y Pull Requests para revisar los cambios antes de incorporarlos a la rama principal.
+
+## 3. Gestión del Backlog Ágil
+
+El seguimiento de las Historias de Usuario del proyecto I2-Sync se realiza mediante GitHub Projects. El tablero permite visualizar las tareas, sus criterios de aceptación y su estado de avance.
+
+**Tablero del proyecto:** [I2-Sync - GitHub Projects](https://github.com/users/NahueKlen/projects/1/views/1)
+
+Las tres Historias de Usuario se organizan según su estado: Por Hacer, En Progreso y Listo.
