@@ -1,53 +1,94 @@
+
 # Diccionario de Datos — I2-Sync
 
 ## 1. Introducción
 
-El diccionario de datos describe las entidades, los atributos y las relaciones que forman parte del sistema I2-Sync. Su finalidad es establecer una definición clara y uniforme de la información utilizada para registrar pedidos, identificar clientes y usuarios, y facilitar la sincronización con el ERP local I2 de MTH S.R.L.
+El sistema I2-Sync es un módulo de gestión comercial desarrollado como propuesta para MTH S.R.L. Su finalidad es permitir la consulta de productos y stock, el registro de pedidos de venta desde dispositivos móviles y la sincronización de las operaciones con el ERP local I2.
 
-Los identificadores `id_cliente` e `id_usuario` pueden aparecer en más de una tabla porque permiten relacionar registros de distintas entidades. Por ejemplo, `id_cliente` identifica al cliente asociado a un pedido, mientras que `id_usuario` permite identificar al usuario responsable de registrar o gestionar una operación. En la tabla donde se define cada entidad, el identificador funciona como clave primaria (PK); cuando se utiliza en otra tabla para establecer una relación, funciona como clave foránea (FK). Esta repetición no implica duplicar la identidad del cliente o del usuario, sino mantener la integridad referencial entre las tablas.
+El diccionario de datos define las entidades, atributos y relaciones necesarios para organizar la información del sistema.
+
+Los identificadores `id_cliente` e `id_usuario` aparecen en más de una tabla porque permiten establecer relaciones entre entidades. En CLIENTE y USUARIO funcionan como claves primarias (PK), mientras que en PEDIDO_VENTA funcionan como claves foráneas (FK).
+
+Esta repetición no representa una duplicación incorrecta de información. Permite relacionar cada pedido con su cliente y con el usuario que lo registró, manteniendo la integridad referencial.
 
 ## 2. Diccionario de datos inicial
 
 ### 2.1. Tabla: CLIENTE
 
+Almacena la información de los clientes que realizan compras a MTH S.R.L.
+
 | Atributo | Descripción | Tipo de dato | Clave |
 |---|---|---|---|
 | `id_cliente` | Identificador único del cliente | INT | PK |
 | `nombre_cliente` | Nombre o razón social del cliente | VARCHAR | — |
+| `cuit` | CUIT del cliente, almacenado como texto para conservar su formato | VARCHAR | — |
+| `domicilio` | Dirección registrada del cliente | VARCHAR | — |
+| `telefono` | Número de contacto del cliente | VARCHAR | — |
 
 ### 2.2. Tabla: PRODUCTO
+
+Almacena la información de los productos comercializados por MTH S.R.L.
 
 | Atributo | Descripción | Tipo de dato | Clave |
 |---|---|---|---|
 | `id_producto` | Identificador único del producto | INT | PK |
-| `codigo_sku` | Código SKU utilizado para identificar el producto en el inventario | VARCHAR | — |
+| `codigo_sku` | Código utilizado para identificar el producto en el inventario | VARCHAR | — |
+| `nombre_producto` | Nombre comercial del producto | VARCHAR | — |
+| `categoria` | Categoría a la que pertenece el producto | VARCHAR | — |
+| `precio_unitario` | Precio de venta por unidad | DECIMAL | — |
+| `stock_disponible` | Cantidad de unidades disponibles para venta o despacho | INT | — |
 
 ### 2.3. Tabla: USUARIO
 
+Almacena los datos de las personas autorizadas para operar en I2-Sync, como vendedores, personal de depósito y administradores.
+
 | Atributo | Descripción | Tipo de dato | Clave |
 |---|---|---|---|
-| `id_usuario` | Identificador único del usuario del sistema | INT | PK |
+| `id_usuario` | Identificador único del usuario | INT | PK |
 | `nombre_completo` | Nombre y apellido del usuario | VARCHAR | — |
 | `email_login` | Correo electrónico utilizado para iniciar sesión | VARCHAR | — |
-| `rol_acceso` | Rol o perfil de permisos asignado al usuario | VARCHAR | — |
-| `Activo` | Indica si el usuario se encuentra habilitado | BOOLEAN | — |
+| `rol_acceso` | Perfil que determina los permisos del usuario | VARCHAR | — |
+| `activo` | Indica si el usuario está habilitado para operar | BOOLEAN | — |
 
 ### 2.4. Tabla: PEDIDO_VENTA
 
-Esta tabla representa los pedidos registrados durante el proceso de venta en ruta.
+Registra los pedidos comerciales realizados por vendedores o personal autorizado.
 
 | Atributo | Descripción | Tipo de dato | Clave |
 |---|---|---|---|
-| `id_pedido` | Identificador único del pedido | INT | PK |
-| `id_cliente` | Cliente al que corresponde el pedido | INT | FK |
-| `id_usuario` | Usuario que registra o gestiona el pedido | INT | FK |
-| `ped_estado_sincro` | Indica si el pedido fue sincronizado correctamente con el ERP | BOOLEAN | — |
+| `id_pedido` | Identificador único del pedido de venta | INT | PK |
+| `fecha_emision` | Fecha y hora de registro del pedido | DATETIME | — |
+| `id_cliente` | Identificador del cliente asociado al pedido | INT | FK |
+| `id_usuario` | Identificador del usuario que registra el pedido | INT | FK |
+| `monto_total` | Importe total del pedido | DECIMAL | — |
+| `ped_estado_sincro` | Indica si el pedido fue sincronizado correctamente con el ERP I2 | BOOLEAN | — |
+
+El campo `ped_estado_sincro` permanece en FALSE mientras la operación esté pendiente de sincronización. Solo se establece en TRUE después de recibir la confirmación satisfactoria del ERP I2.
+
+### 2.5. Tabla: DETALLE_PEDIDO
+
+Registra los productos incluidos en cada pedido, con sus respectivas cantidades y precios. Permite relacionar PEDIDO_VENTA con PRODUCTO.
+
+| Atributo | Descripción | Tipo de dato | Clave |
+|---|---|---|---|
+| `id_detalle` | Identificador único del detalle | INT | PK |
+| `id_pedido` | Identificador del pedido al que pertenece | INT | FK |
+| `id_producto` | Identificador del producto incluido | INT | FK |
+| `cantidad` | Cantidad de unidades solicitadas | INT | — |
+| `precio_unitario` | Precio por unidad aplicado al registrar el pedido | DECIMAL | — |
+| `subtotal` | Importe resultante de multiplicar cantidad por precio unitario | DECIMAL | — |
 
 ## 3. Relaciones entre entidades
 
-- **CLIENTE – PEDIDO_VENTA:** un cliente puede tener varios pedidos. El atributo `id_cliente` de PEDIDO_VENTA referencia a `id_cliente` de CLIENTE.
-- **USUARIO – PEDIDO_VENTA:** un usuario puede registrar o gestionar varios pedidos. El atributo `id_usuario` de PEDIDO_VENTA referencia a `id_usuario` de USUARIO.
+- **CLIENTE – PEDIDO_VENTA:** un cliente puede tener varios pedidos. `PEDIDO_VENTA.id_cliente` referencia a `CLIENTE.id_cliente`.
+- **USUARIO – PEDIDO_VENTA:** un usuario puede registrar varios pedidos. `PEDIDO_VENTA.id_usuario` referencia a `USUARIO.id_usuario`.
+- **PEDIDO_VENTA – DETALLE_PEDIDO:** un pedido puede contener varios registros de detalle. `DETALLE_PEDIDO.id_pedido` referencia a `PEDIDO_VENTA.id_pedido`.
+- **PRODUCTO – DETALLE_PEDIDO:** un producto puede aparecer en diferentes pedidos. `DETALLE_PEDIDO.id_producto` referencia a `PRODUCTO.id_producto`.
 
-## 4. Consideraciones
+## 4. Consideraciones de diseño
 
-Los tipos de datos y atributos incluidos constituyen una estructura inicial. Antes de considerar definitivo el diccionario, deben contrastarse con el modelo de datos completo y con las reglas de negocio del sistema I2-Sync.
+Los nombres de atributos que aparecen en distintas entidades responden a relaciones entre tablas o a datos que cumplen funciones específicas.
+
+Por ejemplo, `precio_unitario` en PRODUCTO representa el precio del producto, mientras que en DETALLE_PEDIDO registra el precio aplicado al momento de la operación.
+
+El diccionario constituye una propuesta inicial del modelo de datos de I2-Sync. Los tipos y atributos deberán contrastarse con la estructura real del ERP I2 antes de implementar la sincronización definitiva.
