@@ -29,3 +29,19 @@
 **Captura de la interacción:**
 
 ![Revisión del diccionario de datos con ChatGPT](captura-02-diccionario.png)
+
+## Evidencia 3: Revisión de historias de usuario en GitHub Projects
+
+**Herramienta utilizada:** ChatGPT.
+
+**Objetivo:** Utilizar inteligencia artificial como apoyo para organizar y verificar las historias de usuario del proyecto I2-Sync mediante GitHub Projects.
+
+**Aspectos revisados:** ChatGPT propuso comprobar que las tres historias de usuario estuvieran registradas en el tablero, con sus respectivos estados: HU01 (Consulta de Stock Móvil) en Listo, HU02 (Recepción Digital de Remitos) en En Progreso y HU03 (Sincronización e Integridad Fiscal) en Por Hacer. También recomendó verificar sus descripciones y criterios de aceptación.
+
+**Intervención humana:** Se utilizó el tablero de GitHub Projects para comprobar la organización de las historias y sus estados, considerando las funcionalidades previstas para I2-Sync. La captura refleja una recomendación de verificación de la IA, no una corrección de un error de diseño.
+
+**Resultado:** La interacción permitió establecer una lista de comprobación para revisar la organización y el seguimiento de las historias de usuario del proyecto.
+
+**Captura de la interacción:**
+
+![Revisión de historias de usuario con ChatGPT](captura-03-github-projects.png)
