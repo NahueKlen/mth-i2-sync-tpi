@@ -13,3 +13,19 @@
 **Captura de la interacción:**
 
 ![Revisión del diagrama BPMN con ChatGPT](captura-01-bpmn.png)
+
+## Evidencia 2: Revisión del diccionario de datos
+
+**Herramienta utilizada:** ChatGPT.
+
+**Objetivo:** Analizar las observaciones del profesor sobre el Diccionario de Datos Inicial de la Entrega 3 del proyecto I2-Sync.
+
+**Problemas identificados:** Durante la revisión asistida por IA se detectaron inconsistencias en la definición de las entidades y sus atributos. Entre ellas, el uso de `id_pedido` como identificador de PRODUCTO, una descripción incorrecta del campo `codigo_sku`, una entidad de usuarios denominada erróneamente PEDIDO_VENTA y nombres de campos que requerían una mejor diferenciación.
+
+**Intervención humana:** Se contrastaron las recomendaciones de ChatGPT con las observaciones del profesor y con la estructura prevista para I2-Sync. Se revisó la correspondencia entre entidades, atributos e identificadores, considerando también las relaciones entre las tablas.
+
+**Resultado:** La revisión permitió identificar las modificaciones necesarias para mejorar la coherencia del diccionario de datos y su correspondencia con el sistema propuesto.
+
+**Captura de la interacción:**
+
+![Revisión del diccionario de datos con ChatGPT](captura-02-diccionario.png)
